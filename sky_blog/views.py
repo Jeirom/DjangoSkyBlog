@@ -11,7 +11,7 @@ class SkyBlogListView(ListView):
     context_object_name = 'blogs'
 
     def get_queryset(self):
-        pass
+        return MyBlog.objects.filter(public_status=True).order_by('created_at')
 
 
 class SkyBlogCreateView(CreateView):
@@ -43,6 +43,8 @@ class SkyBlogUpdateView(UpdateView):
     template_name = 'mymodel_edit.html'
     success_url = reverse_lazy('mymodel_list')
 
+    def get_success_url(self):
+        return reverse_lazy('mymodel_detail', args=[self.kwargs.get('pk')])
 
 class SkyBlogDeleteView(DeleteView):
     """А этот удаляет блог"""
