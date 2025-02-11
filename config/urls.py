@@ -5,4 +5,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('sky_blog.urls'), name='myblog'),
     path('catalog/', include('catalog.urls'), name='catalog'),
+    path('users/', include('users.urls'), name='users'),
 ]

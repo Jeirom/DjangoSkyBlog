@@ -17,7 +17,7 @@ FORBIDDEN_WORDS = (
 ALLOWED_EXTENSIONS = ["jpg", "jpeg", "png"]
 
 
-class ProductFormMixin:
+class StyleFormMixin:
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
@@ -27,7 +27,7 @@ class ProductFormMixin:
                 field.widget.attrs["class"] = "form-control"
 
 
-class ProductForm(ProductFormMixin, ModelForm):
+class ProductForm(StyleFormMixin, ModelForm):
     class Meta:
         model = Product
         fields = [
