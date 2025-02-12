@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from django.conf.global_settings import LOGIN_REDIRECT_URL, LOGOUT_REDIRECT_URL, SERVER_EMAIL
+from django.conf.global_settings import LOGIN_REDIRECT_URL, LOGOUT_REDIRECT_URL, SERVER_EMAIL, LOGIN_URL
 from dotenv import load_dotenv
 
 load_dotenv(override=True)
@@ -131,3 +131,5 @@ EMAIL_HOST_USER = 'Jeirom07@yandex.ru'
 EMAIL_HOST_PASSWORD = 'puyvpgjtxtflwqkd'
 SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# LOGIN_URL = '../users/templates/login.html'

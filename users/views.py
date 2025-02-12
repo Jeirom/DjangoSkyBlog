@@ -46,3 +46,7 @@ class CustomLoginView(LoginView):
     template_name = 'users:login'
     redirect_authenticated_user = True  # Перенаправление, если пользователь уже авторизован
     success_url = reverse_lazy('catalog:product_list')  # URL для перенаправления после успешного входа
+
+    def form_valid(self, form):
+
+        return super().form_valid(form)
