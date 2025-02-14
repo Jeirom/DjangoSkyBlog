@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список объектов MyModel</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/styles.css"> <!-- Ваши стили -->
+</head>
+<body>
+    <!-- Шапка -->
+    <header class="bg-primary text-white text-center py-3">
+        <h1>SkyBlog. Фреймворк(Django) - освобожденный </h1>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="{% url 'mymodel_list' %}">Главная</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'mymodel_form' %}">Создать объект</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container mt-5">
+        <h2 class="mb-4">Cписок блогов SkyBlog</h2>
+        <a href="{% url 'mymodel_form' %}" class="btn btn-success mb-3">Создать новый блог</a>
+        <ul class="list-group">
+            {% for mymodel in blogs %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a href="{% url 'mymodel_detail' mymodel.pk %}" class="text-decoration-none">{{ mymodel.title|truncatechars:25 }}</a>
+                    <a href="{% url 'mymodel_detail' mymodel.pk %}" class="text-decoration-none">{{ mymodel.content|truncatechars:25 }}</a>
+                    <div>
+                        <a href="{% url 'mymodel_edit' mymodel.pk %}" class="btn btn-sm btn-warning ml-3">Редактировать</a>
+                        <a href="{% url 'mymodel_confirm_delete' mymodel.pk %}" class="btn btn-sm btn-danger ml-1">Удалить</a>
+                    </div>
+                </li>
+            {% empty %}
+                <li class="list-group-item text-center">Нет доступных объектов.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Подвал -->
+    <footer class="bg-light text-center py-4 mt-5">
+        <div class="container">
+            <p class="mb-0">© {{ current_year }} Мой сайт. Все права защищены.</p>
+
+        </div>
+    </footer>
+
+    <script src="/static/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
