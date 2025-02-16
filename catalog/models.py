@@ -1,4 +1,5 @@
 from django.db import models
+from users.models import User
 
 
 class Category(models.Model):
@@ -38,12 +39,16 @@ class Product(models.Model):
     updated_at = models.DateTimeField(
         verbose_name="Дата последнего изменения", blank=True, null=True
     )
+    public_status = models.BooleanField(default=False) # Статус публикации. По умолчанию = False. Когда модератор поменяет статус на True - продукт появится на сайте
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True) # Связывает продукцию к определенному пользователю *который авторизован на сайте
 
     class Meta:
         verbose_name = "продукт"
         verbose_name_plural = "продукты"
         ordering = ["name"]
-
+        permissions = [
+            ('can_unpublish_product', 'Can unpublish product'),
+        ]
     def __str__(self):
         return f"{self.name}"
 

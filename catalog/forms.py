@@ -38,6 +38,7 @@ class ProductForm(StyleFormMixin, ModelForm):
             "price",
             "created_at",
             "updated_at",
+            "public_status"
         ]
 
     def clean_name(self):
@@ -73,3 +74,4 @@ class ProductForm(StyleFormMixin, ModelForm):
             )
 
         return photo
+
