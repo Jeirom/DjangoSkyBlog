@@ -12,9 +12,12 @@
               <p class="card-text">Категория: {{object.category}}</p>
               <p class="card-text">{{object.description}}</p>
               <p class="card-text">Стоймость в рублях: {{object.price}}</p>
+
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
+                  {% if perms.product.can_change_product %}
                   <a class="btn btn-outline-primary" href="{% url 'catalog:product_update' product.pk %}" role="button">Редактировать</a>
+                  {% endif %}
                   <a class="btn btn-outline-primary" href="{% url 'catalog:product_list' %}" role="button">Назад</a>
                 </div>
               </div>
