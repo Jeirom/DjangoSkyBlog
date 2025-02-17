@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -39,10 +40,6 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy("catalog:product_list")
     login_url = reverse_lazy('users:login')
 
-    def form_valid(self, form):
-        form.instance.owner = self.request.user  # устанавливаем владельца продукта
-        return super().form_valid(form)
-
 
 class ProductListView(LoginRequiredMixin, ListView):
     """
@@ -52,6 +49,21 @@ class ProductListView(LoginRequiredMixin, ListView):
     """
     model = Product
     login_url = reverse_lazy('users:login')
+
+    def get_queryset(self):
+        """
+        Фильтруем продукты в зависимости от прав пользователя.
+        """
+        queryset = super().get_queryset()
+
+        # Проверяем наличие прав can_unpublish_product у пользователя
+        if self.request.user.has_perm('app_label.can_unpublish_product'):
+            # Если права есть, возвращаем все продукты
+            return queryset
+        else:
+            # Если прав нет, фильтруем прошедшие публикацию
+            return queryset.filter(public_status=True)
+
 
 
 class ProductDetailView(LoginRequiredMixin, DetailView):
@@ -87,8 +99,11 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
         if self.object.owner != request.user:
             return self.handle_no_permission()
 
-        return super().dispatch(request, *args, **kwargs)
+        # Проверка разрешения can_unpublish_product
+        if not request.user.has_perm('product.can_unpublish_product'):
+            raise PermissionDenied("У вас нет прав для обновления этого продукта.")
 
+        return super().dispatch(request, *args, **kwargs)
 
 
 class ProductDeleteView(LoginRequiredMixin, DeleteView):

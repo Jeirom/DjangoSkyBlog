@@ -14,8 +14,12 @@
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
                   <a class="btn btn-outline-primary" href="{% url 'catalog:product_detail' product.pk %}" role="button">Посмотреть</a>
+                  {% if perms.product.can_change_product %}
                   <a class="btn btn-outline-primary" href="{% url 'catalog:product_update' product.pk %}" role="button">Редактировать</a>
+                  {% endif %}
+                  {% if perms.product.can_delete_product %}
                   <a class="btn btn-outline-danger" href="{% url 'catalog:product_delete' product.pk %}" role="button">Удалить</a>
+                  {% endif %}
                 </div>
               </div>
             </div>
