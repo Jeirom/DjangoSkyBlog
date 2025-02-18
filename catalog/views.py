@@ -3,12 +3,15 @@ from django.core.exceptions import PermissionDenied
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView, View)
 
 from catalog.forms import ProductForm
 from catalog.models import Contact, Product, Category
 from catalog.services import get_product_by_category
+from django.core.cache import cache
 
 
 class ContactsView(LoginRequiredMixin, View):
@@ -42,15 +45,13 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
     login_url = reverse_lazy('users:login')
 
 
-
-
 class ProductsByCategoryView(LoginRequiredMixin, ListView):
     model = Product
-    template_name = 'products/products_by_category.html'  # Название шаблона
+    # template_name = 'products/products_by_category.html'  # Название шаблона
     context_object_name = 'products'
 
     def get_queryset(self):
-        category_id = self.kwargs['category_id']
+        category_id = self.kwargs['category']
         # Получаем категорию, если её не существует, будет 404 ошибка
         self.category = get_object_or_404(Category, category=category_id)
         return get_product_by_category(category_id)
@@ -70,6 +71,7 @@ class ProductListView(LoginRequiredMixin, ListView):
     model = Product
     login_url = reverse_lazy('users:login')
 
+    @method_decorator(cache_page(60 * 15))
     def get_queryset(self):
         """
         Фильтруем продукты в зависимости от прав пользователя.
@@ -83,6 +85,7 @@ class ProductListView(LoginRequiredMixin, ListView):
         else:
             # Если прав нет, фильтруем прошедшие публикацию
             return queryset.filter(public_status=True)
+
 
 
 
