@@ -71,7 +71,8 @@ class ProductListView(LoginRequiredMixin, ListView):
         """
         Фильтруем продукты в зависимости от прав пользователя.
         """
-        queryset = super().get_queryset()
+        # Получаем продукты из кэша или базы данных
+        queryset = get_products_from_cache()
 
         # Проверяем наличие прав can_unpublish_product у пользователя
         if self.request.user.has_perm('app_label.can_unpublish_product'):
