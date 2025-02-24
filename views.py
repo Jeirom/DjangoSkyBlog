@@ -13,7 +13,6 @@ from catalog.models import Contact, Product, Category
 from catalog.services import get_products_by_category, get_products_from_cache
 
 
-
 class ContactsView(LoginRequiredMixin, View):
     """
     Контроллер для отображения страницы контактов.
@@ -56,15 +55,6 @@ class ProductsByCategoryView(LoginRequiredMixin, ListView):
         context["products"] = get_products_by_category(pk)
         return context
 
-
-class ProductListView(LoginRequiredMixin, ListView):
-    """
-    Контроллер для отображения списка продуктов.
-
-    Требует, чтобы пользователь был аутентифицирован.
-    """
-    model = Product
-    login_url = reverse_lazy('users:login')
 
     @method_decorator(cache_page(60 * 15))
     def get_queryset(self):
