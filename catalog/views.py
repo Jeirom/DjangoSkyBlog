@@ -10,7 +10,7 @@ from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
 
 from catalog.forms import ProductForm
 from catalog.models import Contact, Product, Category
-from catalog.services import get_products_by_category
+from catalog.services import get_products_by_category, get_products_from_cache
 
 
 
